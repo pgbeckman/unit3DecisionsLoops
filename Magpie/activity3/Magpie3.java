@@ -163,7 +163,6 @@ public class Magpie3
 		{
 			response = "You don't say.";
 		}
-
 		return response;
 	}
 

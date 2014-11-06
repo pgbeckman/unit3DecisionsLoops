@@ -31,19 +31,26 @@ public class Magpie2
 	public String getResponse(String statement)
 	{
 		String response = "";
-		if (statement.indexOf("no") >= 0)
-		{
+		if (statement.indexOf("no") >= 0){
 			response = "Why so negative?";
 		}
 		else if (statement.indexOf("mother") >= 0
 				|| statement.indexOf("father") >= 0
 				|| statement.indexOf("sister") >= 0
-				|| statement.indexOf("brother") >= 0)
-		{
+				|| statement.indexOf("brother") >= 0){
 			response = "Tell me more about your family.";
 		}
-		else
-		{
+		else if (statement.indexOf("cat") >= 0
+				|| statement.indexOf("dog") >= 0){
+			response = "Tell me more about your pets.";
+		}
+		else if (statement.indexOf("Schmit") >= 0){
+			response = "What a great guy.";
+		}
+		else if ((statement.trim()).equals("")){
+			response = "Say something!";
+		}
+		else{
 			response = getRandomResponse();
 		}
 		return response;
