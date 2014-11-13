@@ -16,15 +16,18 @@ public class GameOfLife
 {
     // the world comprised of the grid that displays the graphics for the game
     private ActorWorld world;
-    
+
     // the game board will have 5 rows and 5 columns
-    private final int ROWS = 5;
-    private final int COLS = 5;
-    
+    private final int ROWS = 30;
+    private final int COLS = 30;
+
     // constants for the location of the three cells initially alive
-    private final int X1 = 0, Y1 = 2;
-    private final int X2 = 2, Y2 = 0;
-    private final int X3 = 2, Y3 = 1;
+    private final int X1 = 1, Y1 = 2;
+    private final int X2 = 1, Y2 = 3;
+    private final int X3 = 2, Y3 = 2;
+    private final int X4 = 3, Y4 = 2;
+    private final int X5 = 3, Y5 = 3;
+    public BoundedGrid<Actor> grid = null;
 
     /**
      * Default constructor for objects of class GameOfLife
@@ -35,19 +38,19 @@ public class GameOfLife
     public GameOfLife()
     {
         // create the grid, of the specified size, that contains Actors
-        BoundedGrid<Actor> grid = new BoundedGrid<Actor>(ROWS, COLS);
-        
+        grid = new BoundedGrid<Actor>(ROWS, COLS);
+
         // create a world based on the grid
         world = new ActorWorld(grid);
-        
+
         // populate the game
         populateGame();
-        
+
         // display the newly constructed and populated world
         world.show();
-        
+
     }
-    
+
     /**
      * Creates the actors and inserts them into their initial starting positions in the grid
      *
@@ -60,19 +63,27 @@ public class GameOfLife
         // the grid of Actors that maintains the state of the game
         //  (alive cells contains actors; dead cells do not)
         Grid<Actor> grid = world.getGrid();
-        
+
         // create and add rocks (a type of Actor) to the three intial locations
         Rock rock1 = new Rock();
         Location loc1 = new Location(X1, Y1);
         grid.put(loc1, rock1);
-        
+
         Rock rock2 = new Rock();
         Location loc2 = new Location(X2, Y2);
         grid.put(loc2, rock2);
-        
+
         Rock rock3 = new Rock();
         Location loc3 = new Location(X3, Y3);
         grid.put(loc3, rock3);
+
+        Rock rock4 = new Rock();
+        Location loc4 = new Location(X4, Y4);
+        grid.put(loc4, rock4);
+
+        Rock rock5 = new Rock();
+        Location loc5 = new Location(X5, Y5);
+        grid.put(loc5, rock5);
     }
 
     /**
@@ -83,19 +94,30 @@ public class GameOfLife
      * @post    the world has been populated with a new grid containing the next generation
      * 
      */
-    private void createNextGeneration()
+    public void createNextGeneration()
     {
         /** You will need to read the documentation for the World, Grid, and Location classes
          *      in order to implement the Game of Life algorithm and leverage the GridWorld framework.
          */
-        
+
         // create the grid, of the specified size, that contains Actors
         Grid<Actor> grid = world.getGrid();
-        
+        BoundedGrid<Actor> gridNew = new BoundedGrid<Actor>(ROWS, COLS);
+
         // insert magic here...
-        
-    }
-    
+        for( int x = 0 ; x < COLS ; x++ ) {
+            for ( int y = 0 ; y < ROWS ; y++) {
+                Location loc = new Location(x,y);
+                int neighborsNum = grid.getNeighbors(loc).size();
+                if ( (this.getActor(x,y)!=null && neighborsNum==2) || neighborsNum==3) {
+                    gridNew.put(loc,new Actor());
+                }
+            }
+        }
+        world.setGrid(gridNew);
+        }
+
+
     /**
      * Returns the actor at the specified row and column. Intended to be used for unit testing.
      *
@@ -120,7 +142,7 @@ public class GameOfLife
     {
         return ROWS;
     }
-    
+
     /**
      * Returns the number of columns in the game board
      *
@@ -130,8 +152,7 @@ public class GameOfLife
     {
         return COLS;
     }
-    
-    
+
     /**
      * Creates an instance of this class. Provides convenient execution.
      *
@@ -139,6 +160,13 @@ public class GameOfLife
     public static void main(String[] args)
     {
         GameOfLife game = new GameOfLife();
+
+        for ( int i = 0 ; i < 3 ; i++ ) {
+            game.createNextGeneration();
+            try {Thread.sleep(1000); 
+            }catch(Exception e){    
+            }
+        }
     }
 
 }
